@@ -1,11 +1,12 @@
 package com.example.cloudstorage.service;
 
-import com.example.cloud.dto.FileResponse;
-import com.example.cloud.entity.AppUser;
-import com.example.cloud.entity.FileEntity;
-import com.example.cloud.repository.FileRepository;
-import com.example.cloud.repository.UserRepository;
+import com.example.cloudstorage.dto.FileResponse;
+import com.example.cloudstorage.entity.AppUser;
+import com.example.cloudstorage.entity.FileEntity;
+import com.example.cloudstorage.repository.FileRepository;
+import com.example.cloudstorage.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class FileService {
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
 
+
+    @Autowired
     public FileService(FileRepository fileRepository, UserRepository userRepository) {
         this.fileRepository = fileRepository;
         this.userRepository = userRepository;

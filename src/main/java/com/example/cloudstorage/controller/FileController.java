@@ -2,6 +2,7 @@ package com.example.cloudstorage.controller;
 
 import com.example.cloudstorage.dto.FileResponse;
 import com.example.cloudstorage.service.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,39 +16,39 @@ public class FileController {
 
     private final FileService fileService;
 
+    @Autowired
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> upload(@RequestHeader("auth-token") String token,
-                                       @RequestParam("file") MultipartFile file) throws IOException {
+    // Загрузка файла
+    @PostMapping("/file")
+    public ResponseEntity<Void> uploadFile(@RequestHeader("auth-token") String token,
+                                           @RequestParam("file") MultipartFile file) throws IOException {
         fileService.uploadFile(token, file);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<byte[]> download(@RequestHeader("auth-token") String token,
-                                           @RequestParam("filename") String filename) throws IOException {
-        byte[] data = fileService.downloadFile(token, filename);
-        return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=" + filename)
-                .body(data);
+    // Список файлов
+    @GetMapping("/list")
+    public ResponseEntity<List<FileResponse>> listFiles(@RequestHeader("auth-token") String token) {
+        return ResponseEntity.ok(fileService.listFiles(token));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestHeader("auth-token") String token,
-                                       @RequestParam("filename") String filename) throws IOException {
+    // Удаление файла
+    @DeleteMapping("/file")
+    public ResponseEntity<Void> deleteFile(@RequestHeader("auth-token") String token,
+                                           @RequestParam("filename") String filename) throws IOException {
         fileService.deleteFile(token, filename);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
-    public ResponseEntity<Void> rename(@RequestHeader("auth-token") String token,
-                                       @RequestParam("filename") String oldName,
-                                       @RequestParam("newName") String newName) throws IOException {
-        fileService.renameFile(token, oldName, newName);
+    // Переименование файла
+    @PutMapping("/file")
+    public ResponseEntity<Void> renameFile(@RequestHeader("auth-token") String token,
+                                           @RequestParam("filename") String oldFilename,
+                                           @RequestBody String newFilename) throws IOException {
+        fileService.renameFile(token, oldFilename, newFilename.replace("\"", ""));
         return ResponseEntity.ok().build();
     }
-
 }

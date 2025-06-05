@@ -1,5 +1,8 @@
 package com.example.cloudstorage.service;
 
+import com.example.cloudstorage.entity.AppUser;
+import com.example.cloudstorage.repository.UserRepository;
+import com.example.cloudstorage.security.AuthTokenStore;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +18,7 @@ public class AuthService {
     private AuthTokenStore tokenStore;
 
     public String login(String login, String password) {
-        User user = userRepository.findByLogin(login)
+        AppUser user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!user.getPassword().equals(password)) {
