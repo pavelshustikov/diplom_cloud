@@ -1,6 +1,9 @@
+storage:
+  location: uploads
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/cloud_db
+    url: jdbc:postgresql://localhost:5432/cloud
     username: postgres
     password: password123
     driver-class-name: org.postgresql.Driver
@@ -282,4 +285,3 @@ components:
       properties:
         auth-token:
           type: string
-
